@@ -1,0 +1,7 @@
+Samostatna praca
+1.  Karticky z hodiny si graficky upravte, nech to nejak krajsie vyzera.
+2.  V poli persons zmente age na birthday. Pod meno vypiste datum narodenia a vedla
+    alebo pod datumom narodenia vypiste vek danej osoby. Kludne si vyrobte 
+    funkciu na prepocet veku z datumu narodenia.
+3.  Podmienky dospelosti a farba ramceka karticky nech je zavisla od veku,
+    ktory ste ziskali v predoslej ulohe.
