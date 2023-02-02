@@ -1,37 +1,30 @@
 <template>
     <main>
-      <h1>Zoznam ľudí</h1>
-      <section class="list">
-        <section v-for="person of persons" v-bind:key="person"
-        v-bind:class="{'card-container':true,'card':true, 'baby':age(person)<=2, 'adult':age(person)>=18, 'old':age(person)>=100 }"><!--v tomto prípade clase priradíme objekt, ktorého vlastnosti predstavujú jednotlivé triedy a ich hodnoti predstavujú bool vyjadrujúci, kedy sa má daná trieda pridať danému elemntu-->
+     	<h1>Zoznam ľudí</h1>
+
+	  	<section style="margin: 1.25rem;">
+			<span style="background: red;" class="btn" @click="deleteButton">Delete All</span>
+			<span style="background: #89cff0;" class="btn" v-show="editBool" @click="submit" >Submit</span>
+		</section>
+
+      	<section class="list">
+        	<section v-for="person of persons" v-bind:key="person" class="card-container">
+		<!--v tomto prípade clase priradíme objekt, ktorého vlastnosti predstavujú jednotlivé triedy a ich hodnoti predstavujú bool vyjadrujúci, kedy sa má daná trieda pridať danému elemntu-->
 		<!--alebo takto tu to poriešime ternárnym operátorom...
 		<section v-for="person of persons" v-bind:key="person" 
-		v-bind:class="person.age>=18 ? 'adult card-container card' : 'card-container card'">
+		v-bind:class="person.age>=18 ? 'adult card-container card' : 'card-container card'"> 
 		-->
-          <article class="info">
-            <div class="name">{{person.fname}} {{person.lname}}</div>
-			<div class="birthday">{{person.birthday.day}}.{{person.birthday.month}}.{{person.birthday.year}}</div>
-            <div class="age">{{age(person)}} <span class="year-title">year</span></div>
-          </article>
-          <footer class="footer-card">
-            <span class="btn edit">Edit</span>
-            <span class="btn remove">Remove</span>
-          </footer>
-        </section>
-      </section>
+
+				<PersonalCard v-bind:person="person" v-bind:editBool="editBool" v-bind:name="name" @removeWasClicked="removePerson" @editWasClicked="editPerosn"></PersonalCard>
+        
+			</section>
+      	</section>
     </main>
 </template>
 
 <script setup>
 
-function age({birthday}){
-	let currentDate = new Date();
-	let currYear = currentDate.getFullYear();
-
-	return currYear - birthday.year
-}
-
-let persons = [
+let initPersons = [
 		{
 			fname: "Magdalena",
 			lname: "Mikulova",
@@ -88,6 +81,34 @@ let persons = [
 			},
 		},
 	]
+
+	let persons = ref(initPersons)
+
+	let deleteBool = ref(false)
+	let editBool = ref(false)
+	let name = ref("")
+
+	const deleteButton = () => {
+		deleteBool.value = true;
+		persons.value = []
+	}
+
+	const submit = () => {
+		editBool.value = true;
+	}
+
+	const removePerson = (personShoudBeRemoved) => {
+		persons.value = persons.value.filter(item => item != personShoudBeRemoved);
+	}
+
+	const editPerosn = (personShoudBeEdited) => {
+		persons.value.forEach(item => {
+			if(item != personShoudBeEdited){
+				editBool.value = true;
+			}
+		})
+		editBool.value = false;
+	}
 </script>
 
 <style>
@@ -142,13 +163,13 @@ let persons = [
 	.card.baby{
 		border-top-color: pink;
 	}
-	.card:hover {}
+
 	.info {
 		padding: 1rem;
 		text-align: center;
 		font-size: 1.3rem;
 	}
-	.name {}
+
 	.age {
 		font-weight: 300;
 		font-size: 1rem;
@@ -179,5 +200,6 @@ let persons = [
 		color: #bbb;
 		font-size: 24px;
 	}
+	
 </style>
 
